@@ -1,17 +1,17 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import TaskItem from './TaskItem'
-import { SCREEN_WIDTH } from '../../constants'
+import { useDispatch, useSelector } from 'react-redux'
+import { FetchTaskRequest } from '../../actions/taskActions'
 
-const TaskList = () => {
+const TaskList = ({ taskList, isPreview }) => {
+    let renderTask = [...(taskList || [])]
+    if (isPreview) renderTask = renderTask.splice(0, 5)
     return (
         <View style={styles.container}>
-            
-            <TaskItem />
-            <TaskItem />
-            <TaskItem />
-            <TaskItem />
-            <TaskItem />
+            {renderTask.map((task, index) => (
+                <TaskItem key={index} task={task} />
+            ))}
         </View >
     )
 }
@@ -22,5 +22,5 @@ const styles = StyleSheet.create({
     container: {
         paddingHorizontal: '5%',
     },
-    
+
 })

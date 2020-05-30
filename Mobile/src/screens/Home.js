@@ -1,9 +1,21 @@
-import React from 'react'
-import { StyleSheet, StatusBar, Image, View, Text, TouchableOpacity, SafeAreaView, ScrollView } from 'react-native'
+import React, { useState, useEffect } from 'react'
+import { StyleSheet, StatusBar, Image, View, Text, TouchableOpacity, SafeAreaView, ScrollView, RefreshControl } from 'react-native'
 import HeaderBg from '../components/HeaderBg'
 import { SCREEN_WIDTH, SCREEN_HEIGHT } from '../constants'
 import TaskList from '../components/TaskList'
+import { useDispatch, useSelector } from 'react-redux'
+import { FetchTaskRequest } from '../actions/taskActions'
+import { navigate } from '../rootNavigation'
 const Home = () => {
+    const dispatch = useDispatch()
+    const [refresh, setRefresh] = useState(false)
+    const taskList = useSelector(state => state.taskList)
+    useEffect(() => {
+        dispatch(FetchTaskRequest())
+    }, [])
+    const _onRefresh = () => {
+        dispatch(FetchTaskRequest())
+    }
     return (
         <View style={styles.container}>
             <StatusBar hidden={true} />
@@ -35,6 +47,12 @@ const Home = () => {
                 </View>
             </View>
             <ScrollView
+                refreshControl={
+                    <RefreshControl
+                        refreshing={refresh}
+                        onRefresh={_onRefresh}
+                    />
+                }
                 style={{
                     height: SCREEN_HEIGHT - 180
                 }}
@@ -42,7 +60,7 @@ const Home = () => {
                 bounces={true}>
                 <View style={styles.overview}>
                     <View style={styles.overviewItemWrapper}>
-                        <View style={styles.overviewItem}>
+                        <TouchableOpacity style={styles.overviewItem}>
                             <Text style={{
                                 fontSize: 20,
                                 fontWeight: 'bold',
@@ -52,8 +70,8 @@ const Home = () => {
                                 fontWeight: 'bold',
                                 fontSize: 16
                             }}>35°C</Text>
-                        </View>
-                        <View style={styles.overviewItem}>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.overviewItem}>
                             <View style={{
                                 height: 3,
                                 width: 50,
@@ -74,7 +92,7 @@ const Home = () => {
                                 fontWeight: 'bold',
                                 fontSize: 16
                             }}>90%</Text>
-                        </View>
+                        </TouchableOpacity>
                     </View>
                     <View style={styles.overviewItemWrapper}>
 
@@ -144,9 +162,18 @@ const Home = () => {
                         }}>Overview Tasks</Text>
                     </View>
                 </View>
-                <TaskList />
+                <TaskList taskList={taskList} isPreview={true} />
+                <TouchableOpacity
+                    onPress={() => navigate('MyTask')}
+                    style={styles.btnViewAllTask}>
+                    <Text style={{
+                        fontWeight: 'bold',
+                        fontSize: 16,
+                        color: '#fff'
+                    }}>View All</Text>
+                </TouchableOpacity>
             </ScrollView>
-        </View>
+        </View >
     )
 }
 
@@ -190,5 +217,15 @@ const styles = StyleSheet.create({
         marginHorizontal: '5%',
         marginVertical: 15,
         backgroundColor: '#ddd'
+    },
+    btnViewAllTask: {
+        marginVertical: 15,
+        height: 44,
+        width: '90%',
+        borderRadius: 5,
+        marginHorizontal: '5%',
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#318bfb'
     }
 })

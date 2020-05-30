@@ -11,15 +11,22 @@ import { StyleSheet } from 'react-native';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 import { db } from './src/constants';
 import { NavigationContainer } from '@react-navigation/native'
-import { createStackNavigator } from '@react-navigation/stack'
+import { createStackNavigator, TransitionPresets } from '@react-navigation/stack'
 import Home from './src/screens/Home';
+import { Provider } from 'react-redux';
+import store from './src/store';
+import MyTask from './src/screens/MyTask';
+import { navigationRef } from './src/rootNavigation';
 const stack = createStackNavigator()
 const RootStack = () => {
   return (
     <stack.Navigator screenOptions={{
       headerShown: false
     }}>
-      <stack.Screen component={Home} name="home" />
+      <stack.Screen component={Home} name="Home" />
+      <stack.Screen options={{
+        ...TransitionPresets.FadeFromBottomAndroid
+      }} component={MyTask} name="MyTask" />
     </stack.Navigator>
   )
 }
@@ -42,16 +49,20 @@ const App = () => {
     db.child('temperatureLimit').set(35)
     db.child('turnOnPump').set(false)
     db.child('turnOnLED').set(false)
-    db.child('pumpTimer').set({
+    db.child('pumpTimer').child(`${new Date().getTime()}`).set({
       from: `${new Date().getTime()}`,
       to: `${new Date().getTime()}`,
-      loop: false
+      loop: false,
+      done: false,
+      name: 'Turn on '
     })
   }
   return (
-    <NavigationContainer>
-      <RootStack />
-    </NavigationContainer>
+    <Provider store={store}>
+      <NavigationContainer ref={navigationRef}>
+        <RootStack />
+      </NavigationContainer>
+    </Provider>
   );
 };
 
