@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native'
+import { StyleSheet, Text, View, Image, TouchableOpacity, Alert } from 'react-native'
 import { RemoveTaskRequest } from '../../actions/taskActions'
 
 const TaskItem = ({ task }) => {
@@ -15,7 +15,16 @@ const TaskItem = ({ task }) => {
         textName = `${hour} hours, ${min} minutes ago`
     }
     const _removeTask = () => {
-        RemoveTaskRequest(task.id)
+        Alert.alert('Remove Task', 'Are you sure ?', [
+            {
+                text: 'OK',
+                onPress: () => RemoveTaskRequest(task.id)
+            },
+            {
+                text: 'Cancel',
+            },
+        ])
+
     }
     return (
         <TouchableOpacity
@@ -29,12 +38,14 @@ const TaskItem = ({ task }) => {
                 flexDirection: 'row',
                 alignItems: 'center'
             }}>
-                <TouchableOpacity>
-                    <Image style={{
-                        width: 24,
-                        height: 24
-                    }} source={require('../../assests/edit.png')} />
-                </TouchableOpacity>
+                {!task.done &&
+                    < TouchableOpacity >
+                        <Image style={{
+                            width: 24,
+                            height: 24
+                        }} source={require('../../assests/edit.png')} />
+                    </TouchableOpacity>
+                }
                 <TouchableOpacity
                     onPress={_removeTask}
                 >
@@ -45,7 +56,7 @@ const TaskItem = ({ task }) => {
                     }} source={require('../../assests/remove.png')} />
                 </TouchableOpacity>
             </View>
-        </TouchableOpacity>
+        </TouchableOpacity >
     )
 }
 

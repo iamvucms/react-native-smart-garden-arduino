@@ -17,6 +17,8 @@ import { Provider } from 'react-redux';
 import store from './src/store';
 import MyTask from './src/screens/MyTask';
 import { navigationRef } from './src/rootNavigation';
+import Temperature from './src/screens/Temperature';
+import Humidity from './src/screens/Humidity';
 const stack = createStackNavigator()
 const RootStack = () => {
   return (
@@ -27,6 +29,8 @@ const RootStack = () => {
       <stack.Screen options={{
         ...TransitionPresets.FadeFromBottomAndroid
       }} component={MyTask} name="MyTask" />
+      <stack.Screen component={Temperature} name="Temperature" />
+      <stack.Screen component={Humidity} name="Humidity" />
     </stack.Navigator>
   )
 }
@@ -37,25 +41,25 @@ const App = () => {
   }, [])
   const _setup = () => {
     db.child('humidities').child(`${new Date().getTime()}`).set({
-      date: new Date().toUTCString(),
+      date: new Date().getTime(),
       value: 77
     })
     db.child('temperatures').child(`${new Date().getTime()}`).set({
-      date: new Date().toUTCString(),
+      date: new Date().getTime(),
       value: 30
     })
     db.child('mode').set(0)
-    db.child('himidityLimit').set(70)
+    db.child('humidityLimit').set(70)
     db.child('temperatureLimit').set(35)
     db.child('turnOnPump').set(false)
     db.child('turnOnLED').set(false)
     db.child('pumpTimer').child(`${new Date().getTime()}`).set({
-      from: `${new Date().getTime()}`,
-      to: `${new Date().getTime()}`,
+      from: new Date().getTime(),
+      to: new Date().getTime() + 999999,
       loop: false,
-      done: false,
-      name: 'Turn on '
+      done: true,
     })
+    db.child('delayTime').set(30000)
   }
   return (
     <Provider store={store}>

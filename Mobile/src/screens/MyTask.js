@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Image, RefreshControl, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import { FetchTaskRequest } from '../actions/taskActions'
@@ -14,103 +14,13 @@ const MyTask = () => {
     const _onRefresh = () => {
         dispatch(FetchTaskRequest())
     }
+    useEffect(() => {
+        setRenderTasks([...(taskList || [])])
+    }, [taskList])
     const done = [...taskList].filter(x => x.done)
     return (
         <View style={styles.container}>
             <StatusBar hidden={true} />
-            <View style={styles.header}>
-                <HeaderBg style={{
-                    position: 'absolute',
-                    top: 0,
-                    left: 0,
-                    width: '100%'
-                }} />
-                <View style={{
-                    marginVertical: 30,
-                    paddingHorizontal: 15,
-                    flexDirection: 'row',
-                    alignItems: "center",
-                    justifyContent: 'space-between'
-                }}>
-                    <TouchableOpacity
-                        onPress={() => goBack()}
-                    >
-                        <Image style={{
-                            height: 36,
-                            width: 36
-                        }} source={require('../assests/back.png')} />
-                    </TouchableOpacity>
-                    <Text style={{
-                        fontWeight: 'bold',
-                        fontSize: 32,
-                        color: '#fff'
-                    }}>MY TASKS</Text>
-
-                </View>
-            </View>
-            <View style={styles.overview}>
-                <TouchableOpacity
-                    onPress={() => setRenderTasks([...(taskList || [])])
-                    }
-                    style={{
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        height: 100
-                    }}>
-                    <Text style={{
-                        fontSize: 20,
-                        fontWeight: 'bold',
-                        color: 'orange'
-                    }}>All Tasks</Text>
-                    <Text style={{
-                        fontWeight: 'bold',
-                        fontSize: 18
-                    }}>{taskList.length || 0}</Text>
-                </TouchableOpacity>
-                <View style={styles.overviewItemWrapper}>
-                    <TouchableOpacity
-                        onPress={() => {
-                            setRenderTasks([...(taskList || [])].filter(x => x.done))
-                        }}
-                        style={styles.overviewItem}>
-                        <Text style={{
-                            fontSize: 20,
-                            fontWeight: 'bold',
-                            color: 'green'
-                        }}>Completed</Text>
-                        <Text style={{
-                            fontWeight: 'bold',
-                            fontSize: 16
-                        }}>{done.length || 0}</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        onPress={() => {
-                            setRenderTasks([...(taskList || [])].filter(x => !x.done))
-                        }}
-                        style={styles.overviewItem}>
-                        <View style={{
-                            height: 3,
-                            width: 50,
-                            backgroundColor: "#ddd",
-                            position: 'absolute',
-                            transform: [{
-                                rotate: '90deg'
-                            }],
-                            left: -25,
-                            top: 50
-                        }} />
-                        <Text style={{
-                            color: 'gray',
-                            fontSize: 20,
-                            fontWeight: 'bold'
-                        }}>Active</Text>
-                        <Text style={{
-                            fontWeight: 'bold',
-                            fontSize: 16
-                        }}>{taskList.length - done.length}</Text>
-                    </TouchableOpacity>
-                </View>
-            </View>
 
             <ScrollView
                 refreshControl={
@@ -120,10 +30,104 @@ const MyTask = () => {
                     />
                 }
                 style={{
-                    height: SCREEN_HEIGHT - 180 - 230
+                    height: SCREEN_HEIGHT
                 }}
                 showsVerticalScrollIndicator={false}
                 bounces={true}>
+                <View style={styles.header}>
+                    <HeaderBg style={{
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        width: '100%'
+                    }} />
+                    <View style={{
+                        marginVertical: 30,
+                        paddingHorizontal: 15,
+                        flexDirection: 'row',
+                        alignItems: "center",
+                        justifyContent: 'space-between'
+                    }}>
+                        <TouchableOpacity
+                            onPress={() => goBack()}
+                        >
+                            <Image style={{
+                                height: 36,
+                                width: 36
+                            }} source={require('../assests/back.png')} />
+                        </TouchableOpacity>
+                        <Text style={{
+                            fontWeight: 'bold',
+                            fontSize: 32,
+                            color: '#fff'
+                        }}>MY TASKS</Text>
+
+                    </View>
+                </View>
+                <View style={styles.overview}>
+                    <TouchableOpacity
+                        onPress={() => setRenderTasks([...(taskList || [])])
+                        }
+                        style={{
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            height: 100
+                        }}>
+                        <Text style={{
+                            fontSize: 20,
+                            fontWeight: 'bold',
+                            color: 'orange'
+                        }}>All Tasks</Text>
+                        <Text style={{
+                            fontWeight: 'bold',
+                            fontSize: 18
+                        }}>{taskList.length || 0}</Text>
+                    </TouchableOpacity>
+                    <View style={styles.overviewItemWrapper}>
+                        <TouchableOpacity
+                            onPress={() => {
+                                setRenderTasks([...(taskList || [])].filter(x => x.done))
+                            }}
+                            style={styles.overviewItem}>
+                            <Text style={{
+                                fontSize: 20,
+                                fontWeight: 'bold',
+                                color: 'green'
+                            }}>Completed</Text>
+                            <Text style={{
+                                fontWeight: 'bold',
+                                fontSize: 16
+                            }}>{done.length || 0}</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            onPress={() => {
+                                setRenderTasks([...(taskList || [])].filter(x => !x.done))
+                            }}
+                            style={styles.overviewItem}>
+                            <View style={{
+                                height: 3,
+                                width: 50,
+                                backgroundColor: "#ddd",
+                                position: 'absolute',
+                                transform: [{
+                                    rotate: '90deg'
+                                }],
+                                left: -25,
+                                top: 50
+                            }} />
+                            <Text style={{
+                                color: 'gray',
+                                fontSize: 20,
+                                fontWeight: 'bold'
+                            }}>Active</Text>
+                            <Text style={{
+                                fontWeight: 'bold',
+                                fontSize: 16
+                            }}>{taskList.length - done.length}</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+
                 <View style={styles.separate}>
                     <View style={{
                         height: 20,

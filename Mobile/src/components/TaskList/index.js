@@ -1,8 +1,6 @@
-import React, { useEffect } from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import React from 'react'
+import { StyleSheet, View } from 'react-native'
 import TaskItem from './TaskItem'
-import { useDispatch, useSelector } from 'react-redux'
-import { FetchTaskRequest } from '../../actions/taskActions'
 
 const TaskList = ({ taskList, isPreview }) => {
     let renderTask = [...(taskList || [])]

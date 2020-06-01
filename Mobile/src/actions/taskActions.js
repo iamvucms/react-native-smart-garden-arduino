@@ -13,11 +13,7 @@ export const FetchTaskRequest = () => {
                             ...value.val()[key]
                         })
                     }
-                    payload = payload.sort((a, b) => {
-                        const time1 = new Date(parseInt(a.from)).getTime()
-                        const time2 = new Date(parseInt(b.from)).getTime()
-                        return time2 - time1
-                    })
+                    payload = payload.sort((a, b) => b.from - a.from)
                     dispatch({
                         type: taskActions.FETCH_TASK_SUCCESS,
                         payload
@@ -33,11 +29,7 @@ export const FetchTaskRequest = () => {
                         ...value.val()[key]
                     })
                 }
-                payload = payload.sort((a, b) => {
-                    const time1 = new Date(parseInt(a.from)).getTime()
-                    const time2 = new Date(parseInt(b.from)).getTime()
-                    return time2 - time1
-                })
+                payload = payload.sort((a, b) => b.from - a.from)
                 dispatch({
                     type: taskActions.FETCH_TASK_SUCCESS,
                     payload
