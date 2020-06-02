@@ -6,69 +6,74 @@
  * @flow strict-local
  */
 
-import React from 'react';
-import {
-  SafeAreaView,
-  StyleSheet,
-  ScrollView,
-  View,
-  Text,
-  StatusBar,
-} from 'react-native';
-
-import {
-  Header,
-  LearnMoreLinks,
-  Colors,
-  DebugInstructions,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
-
-const App: () => React$Node = () => {
+import React, { useEffect } from 'react';
+import { StyleSheet } from 'react-native';
+import { Colors } from 'react-native/Libraries/NewAppScreen';
+import { db } from './src/constants';
+import { NavigationContainer } from '@react-navigation/native'
+import { createStackNavigator, TransitionPresets } from '@react-navigation/stack'
+import Home from './src/screens/Home';
+import { Provider } from 'react-redux';
+import store from './src/store';
+import MyTask from './src/screens/MyTask';
+import { navigationRef } from './src/rootNavigation';
+import Temperature from './src/screens/Temperature';
+import Humidity from './src/screens/Humidity';
+import AddTask from './src/screens/AddTask';
+import UpdateTask from './src/screens/UpdateTask';
+const stack = createStackNavigator()
+const RootStack = () => {
   return (
-    <>
-      <StatusBar barStyle="dark-content" />
-      <SafeAreaView>
-        <ScrollView
-          contentInsetAdjustmentBehavior="automatic"
-          style={styles.scrollView}>
-          <Header />
-          {global.HermesInternal == null ? null : (
-            <View style={styles.engine}>
-              <Text style={styles.footer}>Engine: Hermes</Text>
-            </View>
-          )}
-          <View style={styles.body}>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Step One</Text>
-              <Text style={styles.sectionDescription}>
-                Edit <Text style={styles.highlight}>App.js</Text> to change this
-                screen and then come back to see your edits.
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>See Your Changes</Text>
-              <Text style={styles.sectionDescription}>
-                <ReloadInstructions />
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Debug</Text>
-              <Text style={styles.sectionDescription}>
-                <DebugInstructions />
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Learn More</Text>
-              <Text style={styles.sectionDescription}>
-                Read the docs to discover what to do next:
-              </Text>
-            </View>
-            <LearnMoreLinks />
-          </View>
-        </ScrollView>
-      </SafeAreaView>
-    </>
+    <stack.Navigator screenOptions={{
+      headerShown: false
+    }}>
+      <stack.Screen component={Home} name="Home" />
+      <stack.Screen options={{
+        ...TransitionPresets.FadeFromBottomAndroid
+      }} component={MyTask} name="MyTask" />
+      <stack.Screen component={Temperature} name="Temperature" />
+      <stack.Screen component={Humidity} name="Humidity" />
+      <stack.Screen component={AddTask} name="AddTask" />
+      <stack.Screen component={UpdateTask} name="UpdateTask" />
+    </stack.Navigator>
+  )
+}
+const App = () => {
+
+  useEffect(() => {
+    // _setup()
+  }, [])
+  const _setup = () => {
+    db.child('humidities').child(`${new Date().getTime()}`).set({
+      date: new Date().getTime(),
+      value: 77
+    })
+    db.child('temperatures').child(`${new Date().getTime()}`).set({
+      date: new Date().getTime(),
+      value: 30
+    })
+    db.child('mode').set(0)
+    db.child('humidityLimit').set(70)
+    db.child('temperatureLimit').set(35)
+    db.child('turnOnPump').set(false)
+    db.child('turnOnLED').set(false)
+    db.child('tasks').child(`${new Date().getTime()}`).set({
+      from: new Date().getTime() - 9999999,
+      to: new Date().getTime() + 999999,
+      done: true,
+      actions: {
+        turnOnLED: true,
+        turnOnPump: true
+      }
+    })
+    db.child('delayTime').set(30000)
+  }
+  return (
+    <Provider store={store}>
+      <NavigationContainer ref={navigationRef}>
+        <RootStack />
+      </NavigationContainer>
+    </Provider>
   );
 };
 

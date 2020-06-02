@@ -186,7 +186,17 @@ android {
         }
     }
 }
-
+buildscript {
+    repositories {
+        google()
+        jcenter()
+    }
+  dependencies {
+    // ... other dependencies
+    classpath 'com.google.gms:google-services:4.2.0'
+    // Add me --- /\
+  }
+}
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     //noinspection GradleDynamicVersion
@@ -223,3 +233,4 @@ task copyDownloadableDepsToLibs(type: Copy) {
 }
 
 apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)
+apply plugin: 'com.google.gms.google-services'
