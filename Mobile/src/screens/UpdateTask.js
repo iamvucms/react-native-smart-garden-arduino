@@ -11,8 +11,8 @@ import Switcher from '../components/Switcher'
 const UpdateTask = (props) => {
     const updateTask = props.route?.params?.task || {}
     const [mode, setMode] = useState(0)
-    const [dateFrom, setDateFrom] = useState(new Date(updateTask.from))
-    const [dateFinish, setDateFinish] = useState(new Date(updateTask.to))
+    const [dateFrom, setDateFrom] = useState(new Date(updateTask.from * 1000))
+    const [dateFinish, setDateFinish] = useState(new Date(updateTask.to * 1000))
     const [pump, setPump] = useState(updateTask.actions?.turnOnPump || false)
     const [LED, setLED] = useState(updateTask.actions?.turnOnLED || false)
     const [name, setName] = useState(updateTask.name)
@@ -90,8 +90,8 @@ const UpdateTask = (props) => {
                 text: 'OK',
                 onPress: () => {
                     const task = {
-                        from: dateFrom.getTime(),
-                        to: dateFinish.getTime(),
+                        from: Math.round(dateFrom.getTime() / 1000),
+                        to: Math.round(dateFinish.getTime() / 1000),
                         actions: {
                             turnOnPump: pump,
                             turnOnLED: LED

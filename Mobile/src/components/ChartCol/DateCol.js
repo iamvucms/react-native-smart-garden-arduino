@@ -2,7 +2,7 @@ import React from 'react'
 import { StyleSheet, Text, View, TouchableOpacity, Animated } from 'react-native'
 
 const DateCol = ({ item }) => {
-    const date = new Date(item.date)
+    const date = new Date(item.date*1000)
     const _animationValue = React.useMemo(() => new Animated.Value(0), [])
     const _showDetail = () => {
         Animated.spring(_animationValue, {

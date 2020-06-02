@@ -10,7 +10,7 @@ export const FetchTaskRequest = () => {
                     for (let key in value.val()) {
                         payload.push({
                             id: parseInt(key),
-                            ...value.val()[key]
+                            ...value.val()[key],
                         })
                     }
                     payload = payload.sort((a, b) => b.from - a.from)
@@ -53,7 +53,7 @@ export const UpdateTaskRequest = (id, task) => {
 export const AddTaskRequest = (task) => {
     db.child('mode').set(2)
     db.child('tasks').child(`${task.from}`).set({
-        ...task
+        ...task,
     })
 }
 export const RemoveTaskRequest = (id) => {

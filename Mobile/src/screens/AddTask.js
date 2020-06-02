@@ -90,8 +90,8 @@ const AddTask = () => {
                 text: 'Switch and Create Task',
                 onPress: () => {
                     const task = {
-                        from: dateFrom.getTime(),
-                        to: dateFinish.getTime(),
+                        from: Math.round(dateFrom.getTime() / 1000),
+                        to: Math.round(dateFinish.getTime() / 1000),
                         actions: {
                             turnOnPump: pump,
                             turnOnLED: LED

@@ -10,13 +10,15 @@ import DateCol from '../components/ChartCol/DateCol'
 const Humidity = () => {
     const traffic = useSelector(state => state.traffic)
     const [humidities, setHumidities] = useState([...traffic.humidities] || [])
-    const [maxValue, setMaxValue] = useState(100)
+    const [maxValue, setMaxValue] = useState(250)
     const flatListRef = useRef(null)
     const flatListDateRef = useRef(null)
     const timeoutRef = useRef(null)
+    const scrollDateTimeoutRef = useRef(null)
     const invRef = useRef(null)
 
     useEffect(() => {
+        console.warn(humidities.length)
         let temp = [...traffic.humidities]
         setHumidities(temp)
     }, [traffic])
@@ -30,6 +32,8 @@ const Humidity = () => {
         // }, 2500);
         Orientation.lockToLandscapeRight()
         return () => {
+            clearTimeout(scrollDateTimeoutRef.current)
+            clearTimeout(timeoutRef.current)
             clearInterval(invRef.current)
             Orientation.lockToPortrait()
         }
@@ -69,10 +73,13 @@ const Humidity = () => {
                     <FlatList
                         scrollEventThrottle={10}
                         onScroll={({ nativeEvent: { contentOffset: { x } } }) => {
-                            flatListDateRef.current.scrollToOffset({
-                                offset: x,
-                                animated: false
-                            })
+                            clearTimeout(scrollDateTimeoutRef.current)
+                            scrollDateTimeoutRef.current = setTimeout(() => {
+                                flatListDateRef.current.scrollToOffset({
+                                    offset: x,
+                                    animated: true
+                                })
+                            }, 300);
                         }}
 
                         // updateCellsBatchingPeriod={150}

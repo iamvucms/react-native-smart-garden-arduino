@@ -16,7 +16,7 @@ const Temperature = () => {
     const flatListDateRef = useRef(null)
     const timeoutRef = useRef(null)
     const invRef = useRef(null)
-
+    const scrollDateTimeoutRef = useRef(null)
     useEffect(() => {
         let temp = [...traffic.temperatures]
         setTemperatures(temp)
@@ -31,6 +31,8 @@ const Temperature = () => {
         // }, 2500);
         Orientation.lockToLandscapeRight()
         return () => {
+            clearTimeout(scrollDateTimeoutRef.current)
+            clearTimeout(timeoutRef.current)
             clearInterval(invRef.current)
             Orientation.lockToPortrait()
         }
@@ -70,10 +72,13 @@ const Temperature = () => {
                     <FlatList
                         scrollEventThrottle={10}
                         onScroll={({ nativeEvent: { contentOffset: { x } } }) => {
-                            flatListDateRef.current.scrollToOffset({
-                                offset: x,
-                                animated: false
-                            })
+                            clearTimeout(scrollDateTimeoutRef.current)
+                            scrollDateTimeoutRef.current = setTimeout(() => {
+                                flatListDateRef.current.scrollToOffset({
+                                    offset: x,
+                                    animated: true
+                                })
+                            }, 300);
                         }}
 
                         // updateCellsBatchingPeriod={150}

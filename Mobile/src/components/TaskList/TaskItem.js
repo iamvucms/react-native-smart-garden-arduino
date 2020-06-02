@@ -4,7 +4,7 @@ import { RemoveTaskRequest } from '../../actions/taskActions'
 import { navigate } from '../../rootNavigation'
 
 const TaskItem = ({ task }) => {
-    const time = task.done ? new Date(parseInt(task.to)) : new Date(parseInt(task.from))
+    const time = task.done ? new Date(parseInt(task.to) * 1000) : new Date(parseInt(task.from) * 1000)
     let remainingTime = Math.abs((time.getTime() - new Date().getTime()) / 1000)
     const day = `0${Math.floor(remainingTime / 86400)}`.slice(-2)
     const hour = `0${Math.floor((remainingTime - day * 86400) / 3600)}`.slice(-2)
