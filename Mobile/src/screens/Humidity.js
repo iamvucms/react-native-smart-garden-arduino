@@ -18,7 +18,6 @@ const Humidity = () => {
     const invRef = useRef(null)
 
     useEffect(() => {
-        console.warn(humidities.length)
         let temp = [...traffic.humidities]
         setHumidities(temp)
     }, [traffic])
