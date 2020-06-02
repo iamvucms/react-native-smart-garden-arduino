@@ -50,7 +50,7 @@ const Humidity = () => {
                     width: 20,
                     height: 20,
                     marginRight: 3,
-                }} source={require('../assests/temperature.png')} />
+                }} source={require('../assests/plant-pot.png')} />
                 <Text style={{
                     fontSize: 24,
                     color: '#fff',

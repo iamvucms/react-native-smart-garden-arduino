@@ -19,6 +19,8 @@ import MyTask from './src/screens/MyTask';
 import { navigationRef } from './src/rootNavigation';
 import Temperature from './src/screens/Temperature';
 import Humidity from './src/screens/Humidity';
+import AddTask from './src/screens/AddTask';
+import UpdateTask from './src/screens/UpdateTask';
 const stack = createStackNavigator()
 const RootStack = () => {
   return (
@@ -31,6 +33,8 @@ const RootStack = () => {
       }} component={MyTask} name="MyTask" />
       <stack.Screen component={Temperature} name="Temperature" />
       <stack.Screen component={Humidity} name="Humidity" />
+      <stack.Screen component={AddTask} name="AddTask" />
+      <stack.Screen component={UpdateTask} name="UpdateTask" />
     </stack.Navigator>
   )
 }
@@ -53,11 +57,14 @@ const App = () => {
     db.child('temperatureLimit').set(35)
     db.child('turnOnPump').set(false)
     db.child('turnOnLED').set(false)
-    db.child('pumpTimer').child(`${new Date().getTime()}`).set({
-      from: new Date().getTime(),
+    db.child('tasks').child(`${new Date().getTime()}`).set({
+      from: new Date().getTime() - 9999999,
       to: new Date().getTime() + 999999,
-      loop: false,
       done: true,
+      actions: {
+        turnOnLED: true,
+        turnOnPump: true
+      }
     })
     db.child('delayTime').set(30000)
   }

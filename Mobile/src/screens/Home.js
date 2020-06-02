@@ -265,16 +265,18 @@ const Home = () => {
 
                                 </View>
                             ) : (
-                                    <TouchableOpacity style={{
-                                        marginTop: 10,
-                                        width: SCREEN_WIDTH * 0.8 - 30,
-                                        height: 44,
-                                        marginHorizontal: 15,
-                                        borderRadius: 5,
-                                        backgroundColor: '#318bfb',
-                                        justifyContent: 'center',
-                                        alignItems: 'center'
-                                    }}>
+                                    <TouchableOpacity
+                                        onPress={() => navigate('AddTask')}
+                                        style={{
+                                            marginTop: 10,
+                                            width: SCREEN_WIDTH * 0.8 - 30,
+                                            height: 44,
+                                            marginHorizontal: 15,
+                                            borderRadius: 5,
+                                            backgroundColor: '#318bfb',
+                                            justifyContent: 'center',
+                                            alignItems: 'center'
+                                        }}>
                                         <Text style={{
                                             fontSize: 16,
                                             color: '#fff',

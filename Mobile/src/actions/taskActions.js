@@ -5,7 +5,7 @@ export const FetchTaskRequest = () => {
     return dispatch => {
         try {
             if (monitoring === false) {
-                db.child('pumpTimer').on('child_changed', value => {
+                db.child('tasks').on('value', value => {
                     let payload = []
                     for (let key in value.val()) {
                         payload.push({
@@ -21,7 +21,7 @@ export const FetchTaskRequest = () => {
                 })
                 monitoring = true
             }
-            db.child('pumpTimer').on('value', value => {
+            db.child('tasks').once('value', value => {
                 let payload = []
                 for (let key in value.val()) {
                     payload.push({
@@ -45,6 +45,17 @@ export const FetchTaskRequest = () => {
         }
     }
 }
+export const UpdateTaskRequest = (id, task) => {
+    db.child('tasks').child(`${id}`).set({
+        ...task
+    })
+}
+export const AddTaskRequest = (task) => {
+    db.child('mode').set(2)
+    db.child('tasks').child(`${task.from}`).set({
+        ...task
+    })
+}
 export const RemoveTaskRequest = (id) => {
-    db.child('pumpTimer').child(`${id}`).remove(() => { })
+    db.child('tasks').child(`${id}`).remove(() => { })
 }

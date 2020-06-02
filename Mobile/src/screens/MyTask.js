@@ -5,7 +5,7 @@ import { FetchTaskRequest } from '../actions/taskActions'
 import HeaderBg from '../components/HeaderBg'
 import TaskList from '../components/TaskList'
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../constants'
-import { goBack } from '../rootNavigation'
+import { goBack, navigate } from '../rootNavigation'
 const MyTask = () => {
     const dispatch = useDispatch()
     const [refresh, setRefresh] = useState(false)
@@ -20,6 +20,40 @@ const MyTask = () => {
     const done = [...taskList].filter(x => x.done)
     return (
         <View style={styles.container}>
+            <View style={{
+                zIndex: 1,
+                backgroundColor: '#318bfb',
+                borderRadius: 60,
+                position: 'absolute',
+                width: 60,
+                height: 60,
+                right: 15,
+                top: SCREEN_HEIGHT - 60 - 15,
+                shadowColor: "#000",
+                shadowOffset: {
+                    width: 0,
+                    height: 2,
+                },
+                shadowOpacity: 0.25,
+                shadowRadius: 3.84,
+
+                elevation: 10,
+            }}>
+                <TouchableOpacity
+                    onPress={() => navigate('AddTask')}
+                    activeOpacity={0.7}
+                    style={{
+                        width: '100%',
+                        height: '100%',
+                        justifyContent: 'center',
+                        alignItems: 'center'
+                    }}>
+                    <Image style={{
+                        height: 24,
+                        width: 24
+                    }} source={require('../assests/plus.png')} />
+                </TouchableOpacity>
+            </View>
             <StatusBar hidden={true} />
 
             <ScrollView
@@ -30,7 +64,7 @@ const MyTask = () => {
                     />
                 }
                 style={{
-                    height: SCREEN_HEIGHT
+                    height: SCREEN_HEIGHT,
                 }}
                 showsVerticalScrollIndicator={false}
                 bounces={true}>
@@ -155,6 +189,7 @@ const MyTask = () => {
                     </View>
                 </View>
                 <TaskList taskList={renderTasks} />
+                <View style={{ marginBottom: 75 }} />
             </ScrollView>
         </View >
     )

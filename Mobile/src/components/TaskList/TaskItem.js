@@ -1,18 +1,20 @@
 import React from 'react'
 import { StyleSheet, Text, View, Image, TouchableOpacity, Alert } from 'react-native'
 import { RemoveTaskRequest } from '../../actions/taskActions'
+import { navigate } from '../../rootNavigation'
 
 const TaskItem = ({ task }) => {
-    const time = new Date(parseInt(task.from))
+    const time = task.done ? new Date(parseInt(task.to)) : new Date(parseInt(task.from))
     let remainingTime = Math.abs((time.getTime() - new Date().getTime()) / 1000)
-    const hour = `0${Math.floor(remainingTime / 3600)}`.slice(-2)
+    const day = `0${Math.floor(remainingTime / 86400)}`.slice(-2)
+    const hour = `0${Math.floor((remainingTime - day * 86400) / 3600)}`.slice(-2)
     const min = `0${Math.floor((remainingTime - hour * 3600) / 60)}`.slice(-2)
     const second = `0${Math.round(remainingTime - hour * 3600 - min * 60)}`.slice(-2)
-    let textName = ''
-    if (time.getTime() - new Date().getTime() > 0) {
-        textName = `${hour} hours, ${min} minutes left`
+    let taskTime = ''
+    if (!task.done) {
+        taskTime = `${day} days, ${hour} hours, ${min} minutes left`
     } else {
-        textName = `${hour} hours, ${min} minutes ago`
+        taskTime = `${day} days, ${hour} hours, ${min} minutes ago`
     }
     const _removeTask = () => {
         Alert.alert('Remove Task', 'Are you sure ?', [
@@ -33,13 +35,25 @@ const TaskItem = ({ task }) => {
                 ...styles.container,
                 backgroundColor: task.done ? '#6cc070' : '#dddddd'
             }}>
-            <Text>{textName}</Text>
+            <View>
+                <Text style={{
+                    fontSize: 14,
+                    fontWeight: 'bold'
+                }}>{task.name ? task.name : '--No name--'}</Text>
+                <Text style={{
+                    fontSize: 12,
+                    color: '#666',
+                    fontWeight: '600'
+                }}>{taskTime}</Text>
+            </View>
             <View style={{
                 flexDirection: 'row',
                 alignItems: 'center'
             }}>
                 {!task.done &&
-                    < TouchableOpacity >
+                    <TouchableOpacity
+                        onPress={() => navigate('UpdateTask', { task })}
+                    >
                         <Image style={{
                             width: 24,
                             height: 24
