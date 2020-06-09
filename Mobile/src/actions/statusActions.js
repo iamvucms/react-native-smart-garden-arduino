@@ -36,10 +36,10 @@ export const FetchStatusRequest = () => {
 export const UpdateStatusRequest = (payload) => {
     return dispatch => {
         if (payload.hasOwnProperty('turnOnLED')) {
-            db.child('turnOnLED').set(payload.turnOnLED)
+            db.child('turnOnLED').set(payload.turnOnLED ? 1 : 0)
         }
         if (payload.hasOwnProperty('turnOnPump')) {
-            db.child('turnOnPump').set(payload.turnOnPump)
+            db.child('turnOnPump').set(payload.turnOnPump ? 1 : 0)
         }
         if (payload.hasOwnProperty('humidityLimit')) {
             db.child('humidityLimit').set(payload.humidityLimit)

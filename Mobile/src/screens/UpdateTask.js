@@ -33,6 +33,7 @@ const UpdateTask = (props) => {
 
     }, [])
     const _onDoneDateFrom = (e) => {
+        
         if (e.nativeEvent?.timestamp) {
             ref.current.dateFrom = e.nativeEvent.timestamp
             setMode(2)
@@ -41,11 +42,13 @@ const UpdateTask = (props) => {
         }
     }
     const _onDoneTimeFrom = (e) => {
+        console.warn("xxx")
         setMode(0)
         if (e.nativeEvent?.timestamp) {
             const date = new Date(ref.current.dateFrom)
             const time = new Date(e.nativeEvent.timestamp)
             const dateTime = new Date(new Date(`${date.getFullYear()}-${`0${date.getMonth() + 1}`.slice(-2)}-${`0${date.getDay()}`.slice(-2)}T${`0${time.getHours()}`.slice(-2)}:${`0${time.getMinutes()}`.slice(-2)}:${`0${time.getSeconds()}`.slice(-2)}.000Z`).getTime() - 7 * 3600 * 1000)
+            
             if (dateTime.getTime() < new Date().getTime()) {
                 Alert.alert("Error!", 'Check the begin and finish time')
             } else setDateFrom(dateTime)
@@ -60,6 +63,7 @@ const UpdateTask = (props) => {
         }
     }
     const _onDoneTimeFinish = (e) => {
+        
         setMode(0)
         if (e.nativeEvent?.timestamp) {
             const date = new Date(ref.current.dateFinish)
@@ -93,8 +97,8 @@ const UpdateTask = (props) => {
                         from: Math.round(dateFrom.getTime() / 1000),
                         to: Math.round(dateFinish.getTime() / 1000),
                         actions: {
-                            turnOnPump: pump,
-                            turnOnLED: LED
+                            turnOnPump: pump ? 1 : 0,
+                            turnOnLED: LED ? 1 : 0
                         },
                         done: false,
                         name: name

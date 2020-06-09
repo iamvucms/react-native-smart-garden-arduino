@@ -128,8 +128,8 @@ const Home = () => {
                                             mode: value
                                         }))
                                     }}
-                                    labels={['Automatic', 'Timer']}
-                                    values={[1, 2]}
+                                    labels={['Manual', 'Automatic', 'Timer']}
+                                    values={[0, 1, 2]}
                                     defaultSelected={status.mode}
                                 />
                             </View>
@@ -265,26 +265,30 @@ const Home = () => {
 
                                 </View>
                             ) : (
-                                    <TouchableOpacity
-                                        onPress={() => navigate('AddTask')}
-                                        style={{
-                                            marginTop: 10,
-                                            width: SCREEN_WIDTH * 0.8 - 30,
-                                            height: 44,
-                                            marginHorizontal: 15,
-                                            borderRadius: 5,
-                                            backgroundColor: '#318bfb',
-                                            justifyContent: 'center',
-                                            alignItems: 'center'
-                                        }}>
-                                        <Text style={{
-                                            fontSize: 16,
-                                            color: '#fff',
-                                            fontWeight: 'bold'
-                                        }}>
-                                            Add Timer Task
+                                    <>
+                                        {status.mode === 2 &&
+                                            <TouchableOpacity
+                                                onPress={() => navigate('AddTask')}
+                                                style={{
+                                                    marginTop: 10,
+                                                    width: SCREEN_WIDTH * 0.8 - 30,
+                                                    height: 44,
+                                                    marginHorizontal: 15,
+                                                    borderRadius: 5,
+                                                    backgroundColor: '#318bfb',
+                                                    justifyContent: 'center',
+                                                    alignItems: 'center'
+                                                }}>
+                                                <Text style={{
+                                                    fontSize: 16,
+                                                    color: '#fff',
+                                                    fontWeight: 'bold'
+                                                }}>
+                                                    Add Timer Task
                                         </Text>
-                                    </TouchableOpacity>
+                                            </TouchableOpacity>
+                                        }
+                                    </>
                                 )}
                         </Animated.View>
                     </View>

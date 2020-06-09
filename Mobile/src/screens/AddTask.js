@@ -42,10 +42,11 @@ const AddTask = () => {
     }
     const _onDoneTimeFrom = (e) => {
         setMode(0)
+        
         if (e.nativeEvent?.timestamp) {
             const date = new Date(ref.current.dateFrom)
             const time = new Date(e.nativeEvent.timestamp)
-            const dateTime = new Date(new Date(`${date.getFullYear()}-${`0${date.getMonth() + 1}`.slice(-2)}-${`0${date.getDay()}`.slice(-2)}T${`0${time.getHours()}`.slice(-2)}:${`0${time.getMinutes()}`.slice(-2)}:${`0${time.getSeconds()}`.slice(-2)}.000Z`).getTime() - 7 * 3600 * 1000)
+            const dateTime = new Date(new Date(`${date.getFullYear()}-${`0${date.getMonth() + 1}`.slice(-2)}-${`0${date.getDate()}`.slice(-2)}T${`0${time.getHours()}`.slice(-2)}:${`0${time.getMinutes()}`.slice(-2)}:${`0${time.getSeconds()}`.slice(-2)}.000Z`).getTime() - 7 * 3600 * 1000)
             if (dateTime.getTime() < new Date().getTime()) {
                 Alert.alert("Error!", 'Check the begin and finish time')
             } else setDateFrom(dateTime)
@@ -64,7 +65,7 @@ const AddTask = () => {
         if (e.nativeEvent?.timestamp) {
             const date = new Date(ref.current.dateFinish)
             const time = new Date(e.nativeEvent.timestamp)
-            const dateTime = new Date(new Date(`${date.getFullYear()}-${`0${date.getMonth() + 1}`.slice(-2)}-${`0${date.getDay()}`.slice(-2)}T${`0${time.getHours()}`.slice(-2)}:${`0${time.getMinutes()}`.slice(-2)}:${`0${time.getSeconds()}`.slice(-2)}.000Z`).getTime() - 7 * 3600 * 1000)
+            const dateTime = new Date(new Date(`${date.getFullYear()}-${`0${date.getMonth() + 1}`.slice(-2)}-${`0${date.getDate()}`.slice(-2)}T${`0${time.getHours()}`.slice(-2)}:${`0${time.getMinutes()}`.slice(-2)}:${`0${time.getSeconds()}`.slice(-2)}.000Z`).getTime() - 7 * 3600 * 1000)
             if (dateTime.getTime() < dateFrom.getTime()) {
                 Alert.alert("Error!", 'Check the begin and finish time')
             } else setDateFinish(dateTime)
@@ -93,8 +94,8 @@ const AddTask = () => {
                         from: Math.round(dateFrom.getTime() / 1000),
                         to: Math.round(dateFinish.getTime() / 1000),
                         actions: {
-                            turnOnPump: pump,
-                            turnOnLED: LED
+                            turnOnPump: pump ? 1 : 0,
+                            turnOnLED: LED ? 1 : 0
                         },
                         done: false,
                         name: name
@@ -199,7 +200,7 @@ const AddTask = () => {
                             <Text style={{
                                 fontSize: 16,
                                 color: dateFrom ? '#000' : '#999'
-                            }}>{dateFrom ? `${`0${dateFrom.getHours()}`.slice(-2)}:${`0${dateFrom.getMinutes()}`.slice(-2)}:${`0${dateFrom.getSeconds()}`.slice(-2)} ${`0${dateFrom.getDay()}`.slice(-2)}/${`0${dateFrom.getMonth() + 1}`.slice(-2)}/${dateFrom.getFullYear()}` : 'Begin Time'}</Text>
+                            }}>{dateFrom ? `${`0${dateFrom.getHours()}`.slice(-2)}:${`0${dateFrom.getMinutes()}`.slice(-2)}:${`0${dateFrom.getSeconds()}`.slice(-2)} ${`0${dateFrom.getDate()}`.slice(-2)}/${`0${dateFrom.getMonth() + 1}`.slice(-2)}/${dateFrom.getFullYear()}` : 'Begin Time'}</Text>
                         </TouchableOpacity>
                         <TouchableOpacity
                             onPress={() => {
@@ -216,7 +217,7 @@ const AddTask = () => {
                             <Text style={{
                                 fontSize: 16,
                                 color: dateFinish ? '#000' : '#999'
-                            }}>{dateFinish ? `${`0${dateFinish.getHours()}`.slice(-2)}:${`0${dateFinish.getMinutes()}`.slice(-2)}:${`0${dateFinish.getSeconds()}`.slice(-2)} ${`0${dateFinish.getDay()}`.slice(-2)}/${`0${dateFinish.getMonth() + 1}`.slice(-2)}/${dateFinish.getFullYear()}` : 'Finish Time'}</Text>
+                            }}>{dateFinish ? `${`0${dateFinish.getHours()}`.slice(-2)}:${`0${dateFinish.getMinutes()}`.slice(-2)}:${`0${dateFinish.getSeconds()}`.slice(-2)} ${`0${dateFinish.getDate()}`.slice(-2)}/${`0${dateFinish.getMonth() + 1}`.slice(-2)}/${dateFinish.getFullYear()}` : 'Finish Time'}</Text>
                         </TouchableOpacity>
                         <View style={{
                             marginTop: 15,
